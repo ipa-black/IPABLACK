@@ -1,0 +1,209 @@
+name: IPA Core Engine
+
+on:
+  workflow_dispatch:
+    inputs:
+      ipa_url:
+        description: 'Direct IPA URL'
+        required: true
+        type: string
+      custom_name:
+        description: 'Custom App Name'
+        required: false
+        type: string
+      custom_desc:
+        description: 'App Description'
+        required: false
+        type: string
+      custom_icon:
+        description: 'Custom Icon URL'
+        required: false
+        type: string
+      category_id:
+        description: 'Category ID'
+        required: false
+        default: 'social'
+        type: string
+
+  push:
+    paths:
+      - 'uploads/*.ipa'
+
+permissions:
+  contents: write
+
+jobs:
+  build_and_release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Extract IPA Metadata and Update JSON
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          IPA_URL: ${{ github.event.inputs.ipa_url }}
+          CUSTOM_NAME: ${{ github.event.inputs.custom_name }}
+          CUSTOM_DESC: ${{ github.event.inputs.custom_desc }}
+          CUSTOM_ICON: ${{ github.event.inputs.custom_icon }}
+          CATEGORY_ID: ${{ github.event.inputs.category_id }}
+          REPO_NAME: ${{ github.repository }}
+        run: |
+          cat << 'EOF' > processor.py
+          import os, sys, glob, json, zipfile, plistlib, urllib.request, urllib.parse, datetime, re
+
+          event_name = os.environ.get('EVENT_NAME', '')
+          repo_name = os.environ.get('REPO_NAME', '')
+
+          ipa_path = None
+          custom_name = ''
+          custom_desc = 'نسخة معدلة ومحدثة'
+          custom_icon = ''
+          category_id = 'social'
+          cleanup_uploads = False
+
+          if event_name == 'push':
+              ipa_files = glob.glob('uploads/*.ipa')
+              if not ipa_files:
+                  print("No IPA file found in uploads/")
+                  sys.exit(0)
+              ipa_path = ipa_files[0]
+              cleanup_uploads = True
+              if os.path.exists('uploads/meta.json'):
+                  with open('uploads/meta.json', 'r', encoding='utf-8') as mf:
+                      meta = json.load(mf)
+                      custom_name = meta.get('name', '').strip()
+                      custom_desc = meta.get('desc', '').strip() or 'نسخة معدلة ومحدثة'
+                      custom_icon = meta.get('icon', '').strip()
+                      category_id = meta.get('category', 'social').strip() or 'social'
+          else:
+              ipa_url = os.environ.get('IPA_URL', '').strip()
+              custom_name = os.environ.get('CUSTOM_NAME', '').strip()
+              custom_desc = os.environ.get('CUSTOM_DESC', '').strip() or 'نسخة معدلة ومحدثة'
+              custom_icon = os.environ.get('CUSTOM_ICON', '').strip()
+              category_id = os.environ.get('CATEGORY_ID', 'social').strip() or 'social'
+
+              print(f"Downloading IPA from URL: {ipa_url}")
+              req = urllib.request.Request(ipa_url, headers={'User-Agent': 'Mozilla/5.0'})
+              ipa_path = 'downloaded_temp.ipa'
+              with urllib.request.urlopen(req) as res, open(ipa_path, 'wb') as out:
+                  out.write(res.read())
+
+          file_size = os.path.getsize(ipa_path)
+
+          plist_data = {}
+          try:
+              with zipfile.ZipFile(ipa_path, 'r') as z:
+                  for name in z.namelist():
+                      if re.match(r'^Payload/[^/]+\.app/Info\.plist$', name):
+                          plist_data = plistlib.loads(z.read(name))
+                          break
+          except Exception as e:
+              print(f"Warning reading Info.plist: {e}")
+
+          bundle_id = plist_data.get('CFBundleIdentifier', 'com.ipablack.app')
+          version = plist_data.get('CFBundleShortVersionString') or plist_data.get('CFBundleVersion') or '1.0'
+          app_name = custom_name or plist_data.get('CFBundleDisplayName') or plist_data.get('CFBundleName') or 'App'
+
+          clean_filename = re.sub(r'[^a-zA-Z0-9_.-]', '_', f"{app_name}_{version}.ipa")
+          if clean_filename.startswith('_') or clean_filename == '.ipa':
+              clean_filename = f"pkg_{int(datetime.datetime.now().timestamp())}.ipa"
+          os.rename(ipa_path, clean_filename)
+
+          icon_url = custom_icon
+          if not icon_url and bundle_id != 'com.ipablack.app':
+              try:
+                  u = f"https://itunes.apple.com/lookup?bundleId={urllib.parse.quote(bundle_id)}"
+                  with urllib.request.urlopen(u) as r:
+                      d = json.loads(r.read().decode())
+                      if d.get('resultCount', 0) > 0:
+                          icon_url = d['results'][0].get('artworkUrl512') or d['results'][0].get('artworkUrl100')
+              except Exception:
+                  pass
+
+          if not icon_url:
+              try:
+                  u = f"https://itunes.apple.com/search?term={urllib.parse.quote(app_name)}&entity=software&limit=1"
+                  with urllib.request.urlopen(u) as r:
+                      d = json.loads(r.read().decode())
+                      if d.get('resultCount', 0) > 0:
+                          icon_url = d['results'][0].get('artworkUrl512')
+              except Exception:
+                  pass
+
+          if os.path.exists('repo.json'):
+              with open('repo.json', 'r', encoding='utf-8') as f:
+                  repo_data = json.load(f)
+          else:
+              repo_data = {"name": "IPA SOURCE", "categories": [], "news": [], "apps": []}
+
+          if not icon_url:
+              icon_url = repo_data.get('iconURL', '')
+
+          tag_name = f"rel-{int(datetime.datetime.now().timestamp())}"
+          download_url = f"https://github.com/{repo_name}/releases/download/{tag_name}/{clean_filename}"
+          today = datetime.datetime.now().strftime('%Y-%m-%d')
+
+          new_app = {
+              "name": app_name,
+              "bundleIdentifier": bundle_id,
+              "developerName": repo_data.get("name", "IPA Source"),
+              "version": str(version),
+              "versionDate": today,
+              "versionDescription": custom_desc,
+              "localizedDescription": custom_desc,
+              "downloadURL": download_url,
+              "down": download_url,
+              "size": file_size,
+              "iconURL": icon_url,
+              "category": category_id,
+              "tintColor": "d4af37",
+              "versions": [
+                  {
+                      "version": str(version),
+                      "date": today,
+                      "size": file_size,
+                      "downloadURL": download_url,
+                      "localizedDescription": custom_desc
+                  }
+              ]
+          }
+
+          repo_data.setdefault('apps', []).insert(0, new_app)
+
+          with open('repo.json', 'w', encoding='utf-8') as f:
+              json.dump(repo_data, f, ensure_ascii=False, indent=2)
+
+          with open(os.environ['GITHUB_ENV'], 'a') as ef:
+              ef.write(f"REL_TAG={tag_name}\n")
+              ef.write(f"IPA_FILE={clean_filename}\n")
+              ef.write(f"APP_TITLE={app_name} v{version}\n")
+              ef.write(f"CLEANUP_UPLOADS={'true' if cleanup_uploads else 'false'}\n")
+          EOF
+          python3 processor.py
+          rm -f processor.py
+
+      - name: Upload IPA to GitHub Releases
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "$REL_TAG" "$IPA_FILE" --title "$APP_TITLE" --notes "Published via Localhost IPA CMS"
+          rm -f "$IPA_FILE"
+
+      - name: Commit Updated repo.json and Clean Temporary Files
+        run: |
+          git config user.name "IPA CMS Bot"
+          git config user.email "bot@github.com"
+          if [ "$CLEANUP_UPLOADS" = "true" ]; then
+            git rm -rf uploads/ || true
+          fi
+          git add -A repo.json uploads/ || git add repo.json
+          git commit -m "Publish ${{ env.APP_TITLE }}"
+          git push

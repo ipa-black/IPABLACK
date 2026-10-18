@@ -1,0 +1,33 @@
+{
+  "name": "IPA BLACK SOURCE",
+  "identifier": "com.ipablack.source",
+  "subtitle": "سورس التطبيقات والأدوات المعدلة",
+  "description": "أحدث تطبيقات وألعاب iOS المعدلة بروابط مباشرة وسريعة",
+  "iconURL": "https://raw.githubusercontent.com/USERNAME/REPO/main/assets/icon.png",
+  "website": "https://github.com/USERNAME/REPO",
+  "tintColor": "#d4af37",
+  "categories": [
+    {
+      "id": "social",
+      "name": "تطبيقات التواصل",
+      "icon": "chat"
+    },
+    {
+      "id": "games",
+      "name": "الألعاب المعدلة",
+      "icon": "gamepad"
+    },
+    {
+      "id": "media",
+      "name": "التصميم والميديا",
+      "icon": "play"
+    },
+    {
+      "id": "tools",
+      "name": "أدوات النظام والتوقيع",
+      "icon": "shield"
+    }
+  ],
+  "news": [],
+  "apps": []
+}

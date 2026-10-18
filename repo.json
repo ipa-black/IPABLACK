@@ -29,5 +29,30 @@
     }
   ],
   "news": [],
-  "apps": []
+  "apps": [
+    {
+      "name": "Stick War Legacy ✨",
+      "bundleIdentifier": "com.stickpage.stickwar",
+      "developerName": "IPA BLACK SOURCE",
+      "version": "2026.1.1196",
+      "versionDate": "2026-10-18",
+      "versionDescription": "نسخة معدلة ومحدثة",
+      "localizedDescription": "نسخة معدلة ومحدثة",
+      "downloadURL": "https://github.com/ipa-black/IPABLACK/releases/download/rel-1792332441/Stick_War_Legacy___2026.1.1196.ipa",
+      "down": "https://github.com/ipa-black/IPABLACK/releases/download/rel-1792332441/Stick_War_Legacy___2026.1.1196.ipa",
+      "size": 81902573,
+      "iconURL": "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/7e/42/9c/7e429ccb-2c81-8b12-1dac-a4ef08b5797b/AppIcon-0-0-1x_U007emarketing-0-8-0-85-220.png/512x512bb.jpg",
+      "category": "games",
+      "tintColor": "d4af37",
+      "versions": [
+        {
+          "version": "2026.1.1196",
+          "date": "2026-10-18",
+          "size": 81902573,
+          "downloadURL": "https://github.com/ipa-black/IPABLACK/releases/download/rel-1792332441/Stick_War_Legacy___2026.1.1196.ipa",
+          "localizedDescription": "نسخة معدلة ومحدثة"
+        }
+      ]
+    }
+  ]
 }

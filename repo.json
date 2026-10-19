@@ -36,6 +36,30 @@
   "news": [],
   "apps": [
     {
+      "name": "Snapchat",
+      "bundleIdentifier": "com.toyopagroup.picaboo",
+      "developerName": "IPA BLACK SOURCE",
+      "version": "13.68.1",
+      "versionDate": "2026-10-19",
+      "versionDescription": "نسخة معدلة ومحدثة",
+      "localizedDescription": "نسخة معدلة ومحدثة",
+      "downloadURL": "https://github.com/ipa-black/IPABLACK/releases/download/rel-1792368303/Snapchat_13.68.1.ipa",
+      "down": "https://github.com/ipa-black/IPABLACK/releases/download/rel-1792368303/Snapchat_13.68.1.ipa",
+      "size": 213928164,
+      "iconURL": "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/84/36/80/843680d0-83f7-93ce-a20b-c9072c56c2ff/AppIcon-0-0-1x_U007epad-0-1-0-85-220.png/512x512bb.jpg",
+      "category": "social",
+      "tintColor": "d4af37",
+      "versions": [
+        {
+          "version": "13.68.1",
+          "date": "2026-10-19",
+          "size": 213928164,
+          "downloadURL": "https://github.com/ipa-black/IPABLACK/releases/download/rel-1792368303/Snapchat_13.68.1.ipa",
+          "localizedDescription": "نسخة معدلة ومحدثة"
+        }
+      ]
+    },
+    {
       "name": "Stick War Legacy ✨",
       "bundleIdentifier": "com.stickpage.stickwar",
       "developerName": "IPA BLACK SOURCE",

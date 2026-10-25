@@ -114,7 +114,7 @@
       "top_banner_enabled": true,
       "top_banner_text": "احبكك",
       "top_banner_url": "https://t.me/ipa_black",
-      "cache_flush_id": 1,
+      "cache_flush_id": 2,
       "purge_sources_id": 5,
       "core_sources": [
         {

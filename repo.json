@@ -86,7 +86,7 @@
   ],
   "xsign_config": {
     "splash_screen": {
-      "engine": "native_vector",
+      "engine": "custom_css",
       "animation_style": "twin_slash",
       "show_sign_feather": false,
       "duration_seconds": 5,

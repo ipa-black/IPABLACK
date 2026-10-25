@@ -111,7 +111,7 @@
       "message": ""
     },
     "app_control": {
-      "top_banner_enabled": true,
+      "top_banner_enabled": false,
       "top_banner_text": "احبكك",
       "top_banner_url": "https://t.me/ipa_black",
       "cache_flush_id": 2,

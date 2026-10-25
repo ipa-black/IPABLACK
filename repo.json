@@ -1,140 +1,62 @@
 {
-  "name": "IPA BLACK SOURCE",
-  "identifier": "com.ipablack.source",
-  "subtitle": "سورس التطبيقات والأدوات المعدلة",
-  "description": "أحدث تطبيقات وألعاب iOS المعدلة بروابط مباشرة وسريعة",
-  "iconURL": "https://raw.githubusercontent.com/USERNAME/REPO/main/assets/icon.png",
-  "website": "https://github.com/USERNAME/REPO",
-  "tintColor": "#d4af37",
-  "categories": [
-    {
-      "id": "social",
-      "name": "تطبيقات التواصل",
-      "icon": "chat"
-    },
-    {
-      "id": "games",
-      "name": "الألعاب المعدلة",
-      "icon": "gamepad"
-    },
-    {
-      "id": "media",
-      "name": "التصميم والميديا",
-      "icon": "play"
-    },
-    {
-      "id": "tools",
-      "name": "أدوات النظام والتوقيع",
-      "icon": "shield"
-    },
-    {
-      "id": "tarfeh",
-      "name": "ترفية",
-      "icon": "play"
-    }
-  ],
-  "news": [],
-  "apps": [
-    {
-      "name": "Snapchat",
-      "bundleIdentifier": "com.toyopagroup.picaboo",
-      "developerName": "IPA BLACK SOURCE",
-      "version": "13.68.1",
-      "versionDate": "2026-10-19",
-      "versionDescription": "نسخة معدلة ومحدثة",
-      "localizedDescription": "نسخة معدلة ومحدثة",
-      "downloadURL": "https://github.com/ipa-black/IPABLACK/releases/download/rel-1792368303/Snapchat_13.68.1.ipa",
-      "down": "https://github.com/ipa-black/IPABLACK/releases/download/rel-1792368303/Snapchat_13.68.1.ipa",
-      "size": 213928164,
-      "iconURL": "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/84/36/80/843680d0-83f7-93ce-a20b-c9072c56c2ff/AppIcon-0-0-1x_U007epad-0-1-0-85-220.png/512x512bb.jpg",
-      "category": "social",
-      "tintColor": "d4af37",
-      "versions": [
-        {
-          "version": "13.68.1",
-          "date": "2026-10-19",
-          "size": 213928164,
-          "downloadURL": "https://github.com/ipa-black/IPABLACK/releases/download/rel-1792368303/Snapchat_13.68.1.ipa",
-          "localizedDescription": "نسخة معدلة ومحدثة"
-        }
-      ]
-    },
-    {
-      "name": "Stick War Legacy ✨",
-      "bundleIdentifier": "com.stickpage.stickwar",
-      "developerName": "IPA BLACK SOURCE",
-      "version": "2026.1.1196",
-      "versionDate": "2026-10-18",
-      "versionDescription": "نسخة معدلة ومحدثة",
-      "localizedDescription": "نسخة معدلة ومحدثة",
-      "downloadURL": "https://github.com/ipa-black/IPABLACK/releases/download/rel-1792332441/Stick_War_Legacy___2026.1.1196.ipa",
-      "down": "https://github.com/ipa-black/IPABLACK/releases/download/rel-1792332441/Stick_War_Legacy___2026.1.1196.ipa",
-      "size": 81902573,
-      "iconURL": "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/7e/42/9c/7e429ccb-2c81-8b12-1dac-a4ef08b5797b/AppIcon-0-0-1x_U007emarketing-0-8-0-85-220.png/512x512bb.jpg",
-      "category": "games",
-      "tintColor": "d4af37",
-      "versions": [
-        {
-          "version": "2026.1.1196",
-          "date": "2026-10-18",
-          "size": 81902573,
-          "downloadURL": "https://github.com/ipa-black/IPABLACK/releases/download/rel-1792332441/Stick_War_Legacy___2026.1.1196.ipa",
-          "localizedDescription": "نسخة معدلة ومحدثة"
-        }
-      ]
-    }
-  ],
+  "name": "IPA BLACK",
+  "identifier": "xsign.core.ipablack",
+  "subtitle": "السورس الرسمي لتطبيق X-Sign",
+  "description": "أحدث التطبيقات المعدلة بروابط مباشرة وسريعة",
+  "iconURL": "https://raw.githubusercontent.com/ipa-black/IPABLACK/main/assets/icon.png",
+  "tintColor": "#005BBB",
   "xsign_config": {
-    "app_status": {
-      "maintenance_mode": false,
-      "maintenance_title": "التطبيق قيد الصيانة",
-      "maintenance_message": "",
-      "support_url": ""
+    "splash_screen": {
+      "engine": "native_vector",
+      "animation_style": "laser_draw",
+      "show_sign_feather": true,
+      "duration_seconds": 3.5,
+      "custom_code": ""
+    },
+    "theme": {
+      "app_tint_hex": "#005BBB",
+      "splash_bg_top_hex": "#002B66",
+      "splash_bg_bottom_hex": "#00183B",
+      "splash_logo_hex": "#FFFFFF"
+    },
+    "maintenance": {
+      "enabled": false,
+      "title": "التطبيق قيد الصيانة والتحديث",
+      "message": "نقوم حالياً بتحديث السيرفرات والشهادات، سيعود التطبيق للعمل قريباً.",
+      "button_url": "https://t.me/ipa_black"
     },
     "force_update": {
       "enabled": false,
       "min_version": "1.0.0",
-      "latest_version": "1.2.0",
-      "update_url": "",
-      "changelog": ""
+      "update_url": "https://github.com/ipa-black/IPABLACK/releases/latest",
+      "message": "يتوفر إصدار جديد وإجباري من تطبيق X-Sign يتضمن تحسينات هامة."
     },
-    "remote_Popup": {
-      "enabled": false,
-      "popup_id": "msg_01",
-      "title": "",
-      "message": "",
-      "button_text": "متابعة",
-      "action_url": "",
-      "show_once": true
-    },
-    "ui_control": {
-      "primary_hex": "#d4af37",
-      "show_signer_tab": true,
-      "show_sources_tab": true,
-      "show_dylibs_tab": true,
-      "allow_custom_repos": true
-    },
-    "monetization_locks": {
-      "paid_app_mode": false,
-      "enable_udid_ban": true,
-      "enable_udid_whitelist": false,
-      "restrict_install": false,
-      "restrict_signing": false,
-      "restrict_dylib_inject": false,
-      "restrict_cloning": false,
-      "restrict_cloud_certs": false,
-      "enable_daily_limit": false,
-      "daily_free_limit": 2,
-      "vip_price_text": "اشتراك سنوي شامل - 10$",
-      "buy_vip_url": "https://t.me/ipa_black",
-      "paywall_message": "هذه الميزة مخصصة لمشتركي نسخة VIP فقط."
-    },
-    "cloud_certificates": [],
-    "cloud_dylibs": [],
-    "access_control": {
-      "valid_keys": [],
-      "whitelisted_udids": [],
-      "blocked_udids": []
+    "app_control": {
+      "top_banner_enabled": false,
+      "top_banner_text": "تم توفير شهادة توقيع جديدة داخل التطبيق",
+      "top_banner_url": "https://t.me/ipa_black",
+      "cache_flush_id": 1,
+      "purge_sources_id": 5,
+      "core_sources": [
+        {
+          "name": "IPA BLACK",
+          "id": "xsign.core.ipablack",
+          "url": "https://raw.githubusercontent.com/ipa-black/IPABLACK/refs/heads/main/repo.json"
+        },
+        {
+          "name": "IPA BLACK Store",
+          "id": "xsign.core.storeapi",
+          "url": "https://raw.githubusercontent.com/ipa-black/store-api/main/public/repo.json"
+        }
+      ]
     }
-  }
+  },
+  "categories": [
+    { "id": "social", "name": "تطبيقات التواصل" },
+    { "id": "games", "name": "الألعاب المعدلة" },
+    { "id": "media", "name": "التصميم والميديا" },
+    { "id": "tools", "name": "أدوات النظام" }
+  ],
+  "news": [],
+  "apps": []
 }

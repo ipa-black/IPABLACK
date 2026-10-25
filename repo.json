@@ -101,11 +101,11 @@
     "maintenance": {
       "enabled": true,
       "title": "التطبيق قيد الصيانة",
-      "message": "",
+      "message": "انتضرونا",
       "button_url": "https://t.me/ipa_black"
     },
     "force_update": {
-      "enabled": false,
+      "enabled": true,
       "min_version": "1.0.0",
       "update_url": "",
       "message": ""

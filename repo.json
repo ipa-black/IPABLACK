@@ -132,9 +132,7 @@
     "cloud_certificates": [],
     "cloud_dylibs": [],
     "access_control": {
-      "valid_keys": [
-        "XSIGN-PQJH-BBKH"
-      ],
+      "valid_keys": [],
       "whitelisted_udids": [],
       "blocked_udids": []
     }

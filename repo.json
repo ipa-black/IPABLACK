@@ -1,39 +1,118 @@
 {
-  "name": "IPA BLACK",
-  "identifier": "xsign.core.ipablack",
-  "subtitle": "السورس الرسمي لتطبيق X-Sign",
-  "description": "أحدث التطبيقات المعدلة بروابط مباشرة وسريعة",
-  "iconURL": "https://raw.githubusercontent.com/ipa-black/IPABLACK/main/assets/icon.png",
-  "tintColor": "#005BBB",
+  "name": "IPA BLACK SOURCE",
+  "identifier": "com.ipablack.source",
+  "subtitle": "سورس التطبيقات والأدوات المعدلة",
+  "description": "أحدث تطبيقات وألعاب iOS المعدلة بروابط مباشرة وسريعة",
+  "iconURL": "https://raw.githubusercontent.com/USERNAME/REPO/main/assets/icon.png",
+  "website": "https://github.com/USERNAME/REPO",
+  "tintColor": "#d4af37",
+  "categories": [
+    {
+      "id": "social",
+      "name": "تطبيقات التواصل",
+      "icon": "chat"
+    },
+    {
+      "id": "games",
+      "name": "الألعاب المعدلة",
+      "icon": "gamepad"
+    },
+    {
+      "id": "media",
+      "name": "التصميم والميديا",
+      "icon": "play"
+    },
+    {
+      "id": "tools",
+      "name": "أدوات النظام والتوقيع",
+      "icon": "shield"
+    },
+    {
+      "id": "tarfeh",
+      "name": "ترفية",
+      "icon": "play"
+    }
+  ],
+  "news": [],
+  "apps": [
+    {
+      "name": "Snapchat",
+      "bundleIdentifier": "com.toyopagroup.picaboo",
+      "developerName": "IPA BLACK SOURCE",
+      "version": "13.68.1",
+      "versionDate": "2026-10-19",
+      "versionDescription": "نسخة معدلة ومحدثة",
+      "localizedDescription": "نسخة معدلة ومحدثة",
+      "downloadURL": "https://github.com/ipa-black/IPABLACK/releases/download/rel-1792368303/Snapchat_13.68.1.ipa",
+      "down": "https://github.com/ipa-black/IPABLACK/releases/download/rel-1792368303/Snapchat_13.68.1.ipa",
+      "size": 213928164,
+      "iconURL": "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/84/36/80/843680d0-83f7-93ce-a20b-c9072c56c2ff/AppIcon-0-0-1x_U007epad-0-1-0-85-220.png/512x512bb.jpg",
+      "category": "social",
+      "tintColor": "d4af37",
+      "versions": [
+        {
+          "version": "13.68.1",
+          "date": "2026-10-19",
+          "size": 213928164,
+          "downloadURL": "https://github.com/ipa-black/IPABLACK/releases/download/rel-1792368303/Snapchat_13.68.1.ipa",
+          "localizedDescription": "نسخة معدلة ومحدثة"
+        }
+      ]
+    },
+    {
+      "name": "Stick War Legacy ✨",
+      "bundleIdentifier": "com.stickpage.stickwar",
+      "developerName": "IPA BLACK SOURCE",
+      "version": "2026.1.1196",
+      "versionDate": "2026-10-18",
+      "versionDescription": "نسخة معدلة ومحدثة",
+      "localizedDescription": "نسخة معدلة ومحدثة",
+      "downloadURL": "https://github.com/ipa-black/IPABLACK/releases/download/rel-1792332441/Stick_War_Legacy___2026.1.1196.ipa",
+      "down": "https://github.com/ipa-black/IPABLACK/releases/download/rel-1792332441/Stick_War_Legacy___2026.1.1196.ipa",
+      "size": 81902573,
+      "iconURL": "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/7e/42/9c/7e429ccb-2c81-8b12-1dac-a4ef08b5797b/AppIcon-0-0-1x_U007emarketing-0-8-0-85-220.png/512x512bb.jpg",
+      "category": "games",
+      "tintColor": "d4af37",
+      "versions": [
+        {
+          "version": "2026.1.1196",
+          "date": "2026-10-18",
+          "size": 81902573,
+          "downloadURL": "https://github.com/ipa-black/IPABLACK/releases/download/rel-1792332441/Stick_War_Legacy___2026.1.1196.ipa",
+          "localizedDescription": "نسخة معدلة ومحدثة"
+        }
+      ]
+    }
+  ],
   "xsign_config": {
     "splash_screen": {
       "engine": "native_vector",
-      "animation_style": "laser_draw",
-      "show_sign_feather": true,
+      "animation_style": "twin_slash",
+      "show_sign_feather": false,
       "duration_seconds": 3.5,
-      "custom_code": ""
+      "custom_code": "<style>\n  body { margin:0; background: linear-gradient(180deg, #ffffff 0%, #00183B 100%); height:100vh; display:flex; align-items:center; justify-content:center; overflow:hidden; }\n  .logo-wrap { width: 230px; height: 230px; }\n  \n        .rib-left { fill: #FFFFFF; transform: translate(-180px, 180px); opacity: 0; animation: slashIn 0.85s cubic-bezier(0.16,1,0.3,1) forwards; }\n        .rib-right { fill: #FFFFFF; transform: translate(180px, -180px); opacity: 0; animation: slashIn 0.85s 0.18s cubic-bezier(0.16,1,0.3,1) forwards; }\n        .sign-grp { opacity: 0; animation: fadeIn 0.7s 0.8s forwards; }\n        @keyframes slashIn { to { transform: translate(0,0); opacity: 1; } }\n        @keyframes fadeIn { to { opacity: 1; } }\n      \n</style>\n<svg class=\"logo-wrap\" viewBox=\"0 0 1000 1000\" xmlns=\"http://www.w3.org/2000/svg\">\n  <defs>\n    <linearGradient id=\"shineGrad\" x1=\"0%\" y1=\"0%\" x2=\"100%\" y2=\"100%\">\n      <stop offset=\"0%\" stop-color=\"#FFFFFF\"/>\n      <stop offset=\"50%\" stop-color=\"#8ec5ff\">\n        <animate attributeName=\"offset\" values=\"0;1;0\" dur=\"2.2s\" repeatCount=\"indefinite\"/>\n      </stop>\n      <stop offset=\"100%\" stop-color=\"#FFFFFF\"/>\n    </linearGradient>\n  </defs>\n  <!-- الشريط الأيسر العلوي المطابق للصورة -->\n  <path class=\"x-rib rib-left\" d=\"M 315.7 196.1 L 443.1 196.1 L 486.3 272.5 L 637.3 56.9 L 486.3 317.6 L 427.5 219.6 L 352.9 219.6 L 437.3 382.4 L 254.9 694.1 L 415.7 382.4 Z\"/>\n  <!-- الشريط الأيمن السفلي المطابق للصورة -->\n  <path class=\"x-rib rib-right\" d=\"M 745.1 56.9 L 576.5 396.1 L 674.5 574.5 L 535.3 574.5 L 500.0 502.0 L 358.8 698.0 L 502.0 454.9 L 552.9 547.1 L 635.3 547.1 L 547.1 396.1 Z\"/>\n  \n</svg>"
     },
     "theme": {
-      "app_tint_hex": "#005BBB",
-      "splash_bg_top_hex": "#002B66",
+      "app_tint_hex": "#d4af37",
+      "splash_bg_top_hex": "#ffffff",
       "splash_bg_bottom_hex": "#00183B",
       "splash_logo_hex": "#FFFFFF"
     },
     "maintenance": {
       "enabled": false,
-      "title": "التطبيق قيد الصيانة والتحديث",
-      "message": "نقوم حالياً بتحديث السيرفرات والشهادات، سيعود التطبيق للعمل قريباً.",
+      "title": "التطبيق قيد الصيانة",
+      "message": "",
       "button_url": "https://t.me/ipa_black"
     },
     "force_update": {
       "enabled": false,
       "min_version": "1.0.0",
-      "update_url": "https://github.com/ipa-black/IPABLACK/releases/latest",
-      "message": "يتوفر إصدار جديد وإجباري من تطبيق X-Sign يتضمن تحسينات هامة."
+      "update_url": "",
+      "message": ""
     },
     "app_control": {
       "top_banner_enabled": false,
-      "top_banner_text": "تم توفير شهادة توقيع جديدة داخل التطبيق",
+      "top_banner_text": "",
       "top_banner_url": "https://t.me/ipa_black",
       "cache_flush_id": 1,
       "purge_sources_id": 5,
@@ -50,13 +129,5 @@
         }
       ]
     }
-  },
-  "categories": [
-    { "id": "social", "name": "تطبيقات التواصل" },
-    { "id": "games", "name": "الألعاب المعدلة" },
-    { "id": "media", "name": "التصميم والميديا" },
-    { "id": "tools", "name": "أدوات النظام" }
-  ],
-  "news": [],
-  "apps": []
+  }
 }

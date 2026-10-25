@@ -128,6 +128,13 @@
           "url": "https://raw.githubusercontent.com/ipa-black/store-api/main/public/repo.json"
         }
       ]
+    },
+    "security_locks": {
+      "lock_bundle_rename": true,
+      "lock_icon_change": true,
+      "lock_dylib_injection": true,
+      "anti_vpn_proxy": true,
+      "vpn_warning_message": "عذراً، لا يمكن استخدام التطبيق أو التحميل أثناء تشغيل VPN أو مراقب شبكة."
     }
   }
 }

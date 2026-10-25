@@ -46,7 +46,7 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Extract IPA Metadata and Update JSON
+      - name: Extract IPA Metadata and Increment Revision
         env:
           EVENT_NAME: ${{ github.event_name }}
           IPA_URL: ${{ github.event.inputs.ipa_url }}
@@ -72,7 +72,6 @@ jobs:
           if event_name == 'push':
               ipa_files = glob.glob('uploads/*.ipa')
               if not ipa_files:
-                  print("No IPA file found in uploads/")
                   sys.exit(0)
               ipa_path = ipa_files[0]
               cleanup_uploads = True
@@ -90,7 +89,6 @@ jobs:
               custom_icon = os.environ.get('CUSTOM_ICON', '').strip()
               category_id = os.environ.get('CATEGORY_ID', 'social').strip() or 'social'
 
-              print(f"Downloading IPA from URL: {ipa_url}")
               req = urllib.request.Request(ipa_url, headers={'User-Agent': 'Mozilla/5.0'})
               ipa_path = 'downloaded_temp.ipa'
               with urllib.request.urlopen(req) as res, open(ipa_path, 'wb') as out:
@@ -105,8 +103,8 @@ jobs:
                       if re.match(r'^Payload/[^/]+\.app/Info\.plist$', name):
                           plist_data = plistlib.loads(z.read(name))
                           break
-          except Exception as e:
-              print(f"Warning reading Info.plist: {e}")
+          except Exception:
+              pass
 
           bundle_id = plist_data.get('CFBundleIdentifier', 'com.ipablack.app')
           version = plist_data.get('CFBundleShortVersionString') or plist_data.get('CFBundleVersion') or '1.0'
@@ -128,21 +126,11 @@ jobs:
               except Exception:
                   pass
 
-          if not icon_url:
-              try:
-                  u = f"https://itunes.apple.com/search?term={urllib.parse.quote(app_name)}&entity=software&limit=1"
-                  with urllib.request.urlopen(u) as r:
-                      d = json.loads(r.read().decode())
-                      if d.get('resultCount', 0) > 0:
-                          icon_url = d['results'][0].get('artworkUrl512')
-              except Exception:
-                  pass
-
           if os.path.exists('repo.json'):
               with open('repo.json', 'r', encoding='utf-8') as f:
                   repo_data = json.load(f)
           else:
-              repo_data = {"name": "IPA SOURCE", "categories": [], "news": [], "apps": []}
+              repo_data = {"name": "IPA BLACK", "repo_revision_id": 1, "categories": [], "news": [], "apps": []}
 
           if not icon_url:
               icon_url = repo_data.get('iconURL', '')
@@ -154,7 +142,7 @@ jobs:
           new_app = {
               "name": app_name,
               "bundleIdentifier": bundle_id,
-              "developerName": repo_data.get("name", "IPA Source"),
+              "developerName": repo_data.get("name", "IPA BLACK"),
               "version": str(version),
               "versionDate": today,
               "versionDescription": custom_desc,
@@ -164,7 +152,7 @@ jobs:
               "size": file_size,
               "iconURL": icon_url,
               "category": category_id,
-              "tintColor": "d4af37",
+              "tintColor": "005BBB",
               "versions": [
                   {
                       "version": str(version),
@@ -177,6 +165,7 @@ jobs:
           }
 
           repo_data.setdefault('apps', []).insert(0, new_app)
+          repo_data['repo_revision_id'] = int(repo_data.get('repo_revision_id', 1)) + 1
 
           with open('repo.json', 'w', encoding='utf-8') as f:
               json.dump(repo_data, f, ensure_ascii=False, indent=2)
@@ -194,12 +183,12 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release create "$REL_TAG" "$IPA_FILE" --title "$APP_TITLE" --notes "Published via Localhost IPA CMS"
+          gh release create "$REL_TAG" "$IPA_FILE" --title "$APP_TITLE" --notes "Published via X-Sign Studio"
           rm -f "$IPA_FILE"
 
-      - name: Commit Updated repo.json and Clean Temporary Files
+      - name: Commit Updated repo.json
         run: |
-          git config user.name "IPA CMS Bot"
+          git config user.name "X-Sign Bot"
           git config user.email "bot@github.com"
           if [ "$CLEANUP_UPLOADS" = "true" ]; then
             git rm -rf uploads/ || true

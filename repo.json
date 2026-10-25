@@ -134,9 +134,7 @@
     "access_control": {
       "valid_keys": [],
       "whitelisted_udids": [],
-      "blocked_udids": [
-        "ن"
-      ]
+      "blocked_udids": []
     }
   }
 }

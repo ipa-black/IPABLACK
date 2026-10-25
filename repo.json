@@ -83,5 +83,60 @@
         }
       ]
     }
-  ]
+  ],
+  "xsign_config": {
+    "app_status": {
+      "maintenance_mode": false,
+      "maintenance_title": "التطبيق قيد الصيانة",
+      "maintenance_message": "",
+      "support_url": ""
+    },
+    "force_update": {
+      "enabled": false,
+      "min_version": "1.0.0",
+      "latest_version": "1.2.0",
+      "update_url": "",
+      "changelog": ""
+    },
+    "remote_Popup": {
+      "enabled": false,
+      "popup_id": "msg_01",
+      "title": "",
+      "message": "",
+      "button_text": "متابعة",
+      "action_url": "",
+      "show_once": true
+    },
+    "ui_control": {
+      "primary_hex": "#d4af37",
+      "show_signer_tab": true,
+      "show_sources_tab": true,
+      "show_dylibs_tab": true,
+      "allow_custom_repos": true
+    },
+    "monetization_locks": {
+      "paid_app_mode": false,
+      "enable_udid_ban": true,
+      "enable_udid_whitelist": false,
+      "restrict_install": false,
+      "restrict_signing": false,
+      "restrict_dylib_inject": false,
+      "restrict_cloning": false,
+      "restrict_cloud_certs": false,
+      "enable_daily_limit": false,
+      "daily_free_limit": 2,
+      "vip_price_text": "اشتراك سنوي شامل - 10$",
+      "buy_vip_url": "https://t.me/ipa_black",
+      "paywall_message": "هذه الميزة مخصصة لمشتركي نسخة VIP فقط."
+    },
+    "cloud_certificates": [],
+    "cloud_dylibs": [],
+    "access_control": {
+      "valid_keys": [
+        "XSIGN-PQJH-BBKH"
+      ],
+      "whitelisted_udids": [],
+      "blocked_udids": []
+    }
+  }
 }

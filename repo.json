@@ -99,7 +99,7 @@
       "splash_logo_hex": "#ffffff"
     },
     "maintenance": {
-      "enabled": false,
+      "enabled": true,
       "title": "التطبيق قيد الصيانة",
       "message": "",
       "button_url": "https://t.me/ipa_black"

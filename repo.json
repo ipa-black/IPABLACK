@@ -5,7 +5,7 @@
   "description": "أحدث التطبيقات المعدلة بروابط مباشرة وسريعة",
   "iconURL": "https://raw.githubusercontent.com/ipa-black/IPABLACK/main/assets/icon.png",
   "tintColor": "#1b62ce",
-  "repo_revision_id": 31,
+  "repo_revision_id": 32,
   "xsign_config": {
     "splash_screen": {
       "engine": "native_vector",
@@ -88,7 +88,7 @@
       "size": 3616127,
       "iconURL": "https://raw.githubusercontent.com/ipa-black/IPABLACK/main/assets/icons/com.alsalmi.tafaul_1793036168.png",
       "screenshotURLs": [],
-      "category": "social",
+      "category": "tools",
       "tintColor": "005BBB",
       "versions": [
         {

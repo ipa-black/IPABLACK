@@ -41,12 +41,15 @@ jobs:
         with:
           fetch-depth: 1
 
-      - name: Setup Python
+      - name: Setup Python & Pillow
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      - name: Extract IPA Metadata and Increment Revision
+      - name: Install Image Processing Dependencies
+        run: pip install Pillow
+
+      - name: Extract IPA Metadata, Icon & Increment Revision
         env:
           EVENT_NAME: ${{ github.event_name }}
           IPA_URL: ${{ github.event.inputs.ipa_url }}
@@ -55,12 +58,135 @@ jobs:
           CUSTOM_ICON: ${{ github.event.inputs.custom_icon }}
           CATEGORY_ID: ${{ github.event.inputs.category_id }}
           REPO_NAME: ${{ github.repository }}
+          BRANCH_NAME: ${{ github.ref_name }}
         run: |
           cat << 'EOF' > processor.py
-          import os, sys, glob, json, zipfile, plistlib, urllib.request, urllib.parse, datetime, re
+          import os, sys, io, glob, json, struct, zlib, zipfile, plistlib, urllib.request, urllib.parse, datetime, re
+          from PIL import Image
+
+          # فك تشفير صيغة أبل CgBI PNG وتحويلها إلى PNG قياسية
+          def normalize_ios_png(data: bytes) -> bytes:
+              try:
+                  if b'CgBI' in data[:32]:
+                      pos = 8
+                      chunks = []
+                      idat_raw = bytearray()
+                      while pos < len(data):
+                          length = struct.unpack('>I', data[pos:pos+4])[0]
+                          chunk_type = data[pos+4:pos+8]
+                          chunk_data = data[pos+8:pos+8+length]
+                          crc = data[pos+8+length:pos+12+length]
+                          pos += 12 + length
+                          if chunk_type == b'CgBI':
+                              continue
+                          elif chunk_type == b'IDAT':
+                              idat_raw.extend(chunk_data)
+                          elif chunk_type == b'IEND':
+                              if idat_raw:
+                                  decompressed = zlib.decompress(bytes(idat_raw), -15)
+                                  recompressed = zlib.compress(decompressed)
+                                  new_crc = struct.pack('>I', zlib.crc32(b'IDAT' + recompressed) & 0xffffffff)
+                                  chunks.append(struct.pack('>I', len(recompressed)) + b'IDAT' + recompressed + new_crc)
+                              chunks.append(struct.pack('>I', length) + chunk_type + chunk_data + crc)
+                              break
+                          else:
+                              chunks.append(struct.pack('>I', length) + chunk_type + chunk_data + crc)
+                      data = data[:8] + b''.join(chunks)
+                      img = Image.open(io.BytesIO(data)).convert('RGBA')
+                      r, g, b, a = img.split()
+                      img = Image.merge('RGBA', (b, g, r, a))
+                  else:
+                      img = Image.open(io.BytesIO(data)).convert('RGBA')
+
+                  out = io.BytesIO()
+                  img.save(out, format='PNG')
+                  return out.getvalue()
+              except Exception as e:
+                  print(f"PNG normalization warning: {e}")
+                  return data
+
+          # استخراج أفضل أيقونة من داخل ملف الـ IPA نفسه
+          def extract_icon_from_ipa(zip_ref: zipfile.ZipFile, app_dir: str, plist_data: dict) -> bytes:
+              icon_candidates = []
+
+              # 1. جمع أسماء الأيقونات المعرفة في Info.plist
+              icon_names = []
+              for key in ('CFBundleIcons', 'CFBundleIcons~ipad'):
+                  icons_dict = plist_data.get(key)
+                  if isinstance(icons_dict, dict):
+                      primary = icons_dict.get('CFBundlePrimaryIcon')
+                      if isinstance(primary, dict):
+                          files = primary.get('CFBundleIconFiles', [])
+                          if isinstance(files, list):
+                              icon_names.extend([str(x) for x in files])
+                          name_str = primary.get('CFBundleIconName')
+                          if isinstance(name_str, str):
+                              icon_names.append(name_str)
+
+              top_files = plist_data.get('CFBundleIconFiles', [])
+              if isinstance(top_files, list):
+                  icon_names.extend([str(x) for x in top_files])
+              top_file = plist_data.get('CFBundleIconFile')
+              if isinstance(top_file, str):
+                  icon_names.append(top_file)
+
+              all_entries = zip_ref.namelist()
+              app_pngs = [
+                  f for f in all_entries
+                  if f.startswith(app_dir) and f.lower().endswith('.png') and f.count('/') <= 3
+              ]
+
+              # مطابقة الأسماء المستخرجة من Info.plist
+              for f in app_pngs:
+                  base = os.path.basename(f).lower()
+                  for iname in icon_names:
+                      clean_iname = iname.lower().replace('.png', '')
+                      if clean_iname and base.startswith(clean_iname):
+                          icon_candidates.append(f)
+
+              # 2. إذا لم نجد مطابقة، نبحث عن أي صورة تحتوي على كلمة AppIcon أو Icon داخل المجلد الرئيسي للتطبيق
+              if not icon_candidates:
+                  for f in app_pngs:
+                      base = os.path.basename(f).lower()
+                      if 'appicon' in base or 'icon' in base:
+                          icon_candidates.append(f)
+
+              # اختيار الأيقونة الأعلى دقة (الأكبر حجماً)
+              if icon_candidates:
+                  best_entry = max(set(icon_candidates), key=lambda x: zip_ref.getinfo(x).file_size)
+                  print(f"Extracted internal icon from IPA: {best_entry}")
+                  return normalize_ios_png(zip_ref.read(best_entry))
+
+              # 3. بحث احتياطي داخل ملف Assets.car إن وجد
+              car_path = f"{app_dir}Assets.car"
+              if car_path in all_entries:
+                  car_bytes = zip_ref.read(car_path)
+                  png_sig = b'\x89PNG\r\n\x1a\n'
+                  iend_sig = b'IEND\xaeB`\x82'
+                  start = 0
+                  extracted_blobs = []
+                  while True:
+                      idx = car_bytes.find(png_sig, start)
+                      if idx == -1:
+                          break
+                      end_idx = car_bytes.find(iend_sig, idx)
+                      if end_idx != -1:
+                          blob = car_bytes[idx:end_idx + 8]
+                          if 1024 < len(blob) < 500000:
+                              extracted_blobs.append(blob)
+                          start = end_idx + 8
+                      else:
+                          break
+                  if extracted_blobs:
+                      best_blob = max(extracted_blobs, key=len)
+                      print("Extracted embedded PNG from Assets.car")
+                      return normalize_ios_png(best_blob)
+
+              return None
 
           event_name = os.environ.get('EVENT_NAME', '')
           repo_name = os.environ.get('REPO_NAME', '')
+          branch_name = os.environ.get('BRANCH_NAME', 'main') or 'main'
 
           ipa_path = None
           custom_name = ''
@@ -97,34 +223,60 @@ jobs:
           file_size = os.path.getsize(ipa_path)
 
           plist_data = {}
+          app_bundle_dir = ''
+          extracted_icon_bytes = None
+
           try:
               with zipfile.ZipFile(ipa_path, 'r') as z:
                   for name in z.namelist():
-                      if re.match(r'^Payload/[^/]+\.app/Info\.plist$', name):
+                      m = re.match(r'^(Payload/[^/]+\.app/)Info\.plist$', name)
+                      if m:
+                          app_bundle_dir = m.group(1)
                           plist_data = plistlib.loads(z.read(name))
                           break
-          except Exception:
-              pass
+
+                  # استخراج الأيقونة من داخل ملفات التطبيق للاحتفاظ بها جاهزة
+                  if app_bundle_dir:
+                      extracted_icon_bytes = extract_icon_from_ipa(z, app_bundle_dir, plist_data)
+          except Exception as e:
+              print(f"Error inspecting IPA archive: {e}")
 
           bundle_id = plist_data.get('CFBundleIdentifier', 'com.ipablack.app')
           version = plist_data.get('CFBundleShortVersionString') or plist_data.get('CFBundleVersion') or '1.0'
           app_name = custom_name or plist_data.get('CFBundleDisplayName') or plist_data.get('CFBundleName') or 'App'
 
+          timestamp = int(datetime.datetime.now().timestamp())
           clean_filename = re.sub(r'[^a-zA-Z0-9_.-]', '_', f"{app_name}_{version}.ipa")
           if clean_filename.startswith('_') or clean_filename == '.ipa':
-              clean_filename = f"pkg_{int(datetime.datetime.now().timestamp())}.ipa"
+              clean_filename = f"pkg_{timestamp}.ipa"
           os.rename(ipa_path, clean_filename)
 
+          # 1. التحقق أولاً من الأيقونة المخصصة أو البحث بالـ Bundle ID في متجر أبل
           icon_url = custom_icon
           if not icon_url and bundle_id != 'com.ipablack.app':
-              try:
-                  u = f"https://itunes.apple.com/lookup?bundleId={urllib.parse.quote(bundle_id)}"
-                  with urllib.request.urlopen(u) as r:
-                      d = json.loads(r.read().decode())
-                      if d.get('resultCount', 0) > 0:
-                          icon_url = d['results'][0].get('artworkUrl512') or d['results'][0].get('artworkUrl100')
-              except Exception:
-                  pass
+              for country in ('us', 'iq', 'sa', 'gb'):
+                  try:
+                      u = f"https://itunes.apple.com/lookup?bundleId={urllib.parse.quote(bundle_id)}&country={country}"
+                      with urllib.request.urlopen(u, timeout=5) as r:
+                          d = json.loads(r.read().decode())
+                          if d.get('resultCount', 0) > 0:
+                              icon_url = d['results'][0].get('artworkUrl512') or d['results'][0].get('artworkUrl100')
+                              if icon_url:
+                                  print(f"Found official App Store icon ({country}): {icon_url}")
+                                  break
+                  except Exception:
+                      pass
+
+          # 2. إذا كان التطبيق محذوفاً من المتجر أو غير موجود، نرفع أيقونته المستخرجة من ملفاته إلى GitHub
+          if not icon_url and extracted_icon_bytes:
+              os.makedirs('assets/icons', exist_ok=True)
+              safe_id = re.sub(r'[^a-zA-Z0-9_.-]', '_', bundle_id)
+              icon_filename = f"{safe_id}_{timestamp}.png"
+              icon_rel_path = f"assets/icons/{icon_filename}"
+              with open(icon_rel_path, 'wb') as icf:
+                  icf.write(extracted_icon_bytes)
+              icon_url = f"https://raw.githubusercontent.com/{repo_name}/{branch_name}/{icon_rel_path}"
+              print(f"Saved internal IPA icon to GitHub repo: {icon_url}")
 
           if os.path.exists('repo.json'):
               with open('repo.json', 'r', encoding='utf-8') as f:
@@ -135,7 +287,7 @@ jobs:
           if not icon_url:
               icon_url = repo_data.get('iconURL', '')
 
-          tag_name = f"rel-{int(datetime.datetime.now().timestamp())}"
+          tag_name = f"rel-{timestamp}"
           download_url = f"https://github.com/{repo_name}/releases/download/{tag_name}/{clean_filename}"
           today = datetime.datetime.now().strftime('%Y-%m-%d')
 
@@ -186,13 +338,14 @@ jobs:
           gh release create "$REL_TAG" "$IPA_FILE" --title "$APP_TITLE" --notes "Published via X-Sign Studio"
           rm -f "$IPA_FILE"
 
-      - name: Commit Updated repo.json
+      - name: Commit Extracted Icon and Updated repo.json
         run: |
           git config user.name "X-Sign Bot"
           git config user.email "bot@github.com"
           if [ "$CLEANUP_UPLOADS" = "true" ]; then
             git rm -rf uploads/ || true
           fi
-          git add -A repo.json uploads/ || git add repo.json
+          mkdir -p assets/icons
+          git add -A repo.json assets/icons/ uploads/ || git add repo.json
           git commit -m "Publish ${{ env.APP_TITLE }}"
           git push

@@ -5,7 +5,7 @@
   "description": "أحدث التطبيقات المعدلة بروابط مباشرة وسريعة",
   "iconURL": "https://raw.githubusercontent.com/ipa-black/IPABLACK/main/assets/icon.png",
   "tintColor": "#005bda",
-  "repo_revision_id": 14,
+  "repo_revision_id": 15,
   "xsign_config": {
     "splash_screen": {
       "engine": "native_vector",
@@ -79,5 +79,6 @@
     }
   ],
   "news": [],
-  "apps": []
+  "apps": [],
+  "last_updated_ms": 1792974596702
 }

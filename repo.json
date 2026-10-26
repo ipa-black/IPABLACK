@@ -5,7 +5,7 @@
   "description": "أحدث التطبيقات المعدلة بروابط مباشرة وسريعة",
   "iconURL": "https://raw.githubusercontent.com/ipa-black/IPABLACK/main/assets/icon.png",
   "tintColor": "#1b62ce",
-  "repo_revision_id": 17,
+  "repo_revision_id": 18,
   "xsign_config": {
     "splash_screen": {
       "engine": "native_vector",
@@ -74,5 +74,30 @@
     }
   ],
   "news": [],
-  "apps": []
+  "apps": [
+    {
+      "name": "iQTele",
+      "bundleIdentifier": "ph.telegra.Telegraph",
+      "developerName": "IPA BLACK",
+      "version": "12.9.4",
+      "versionDate": "2026-10-26",
+      "versionDescription": "نسخة معدلة",
+      "localizedDescription": "نسخة معدلة",
+      "downloadURL": "https://github.com/ipa-black/IPABLACK/releases/download/rel-1792979367/iQTele_12.9.4.ipa",
+      "down": "https://github.com/ipa-black/IPABLACK/releases/download/rel-1792979367/iQTele_12.9.4.ipa",
+      "size": 77604169,
+      "iconURL": "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/49/45/33/49453346-cd15-c622-d6eb-5f4f99ca82fa/Telegram-0-0-1x_U007epad-0-1-0-85-220.png/512x512bb.jpg",
+      "category": "social",
+      "tintColor": "005BBB",
+      "versions": [
+        {
+          "version": "12.9.4",
+          "date": "2026-10-26",
+          "size": 77604169,
+          "downloadURL": "https://github.com/ipa-black/IPABLACK/releases/download/rel-1792979367/iQTele_12.9.4.ipa",
+          "localizedDescription": "نسخة معدلة"
+        }
+      ]
+    }
+  ]
 }

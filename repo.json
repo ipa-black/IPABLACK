@@ -5,7 +5,7 @@
   "description": "أحدث التطبيقات المعدلة بروابط مباشرة وسريعة",
   "iconURL": "https://raw.githubusercontent.com/ipa-black/IPABLACK/main/assets/icon.png",
   "tintColor": "#1b62ce",
-  "repo_revision_id": 18,
+  "repo_revision_id": 19,
   "xsign_config": {
     "splash_screen": {
       "engine": "native_vector",
@@ -75,6 +75,30 @@
   ],
   "news": [],
   "apps": [
+    {
+      "name": "تفاؤل",
+      "bundleIdentifier": "com.alsalmi.tafaul",
+      "developerName": "IPA BLACK",
+      "version": "4.2",
+      "versionDate": "2026-10-26",
+      "versionDescription": "نسخة معدلة ومحدثة",
+      "localizedDescription": "نسخة معدلة ومحدثة",
+      "downloadURL": "https://github.com/ipa-black/IPABLACK/releases/download/rel-1792979504/pkg_1792979504.ipa",
+      "down": "https://github.com/ipa-black/IPABLACK/releases/download/rel-1792979504/pkg_1792979504.ipa",
+      "size": 3616127,
+      "iconURL": "https://raw.githubusercontent.com/ipa-black/IPABLACK/main/assets/icon.png",
+      "category": "social",
+      "tintColor": "005BBB",
+      "versions": [
+        {
+          "version": "4.2",
+          "date": "2026-10-26",
+          "size": 3616127,
+          "downloadURL": "https://github.com/ipa-black/IPABLACK/releases/download/rel-1792979504/pkg_1792979504.ipa",
+          "localizedDescription": "نسخة معدلة ومحدثة"
+        }
+      ]
+    },
     {
       "name": "iQTele",
       "bundleIdentifier": "ph.telegra.Telegraph",

@@ -24,6 +24,11 @@ on:
         required: false
         default: 'social'
         type: string
+      skip_appstore:
+        description: 'App is removed from App Store (Extract icon from IPA files only)'
+        required: false
+        default: 'false'
+        type: string
 
   push:
     paths:
@@ -46,10 +51,12 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install Image Processing Dependencies
-        run: pip install Pillow
+      - name: Install Image Processing Tools
+        run: |
+          sudo apt-get update -y && sudo apt-get install -y ffmpeg
+          pip install Pillow
 
-      - name: Extract IPA Metadata, Icon & Increment Revision
+      - name: Extract IPA Metadata & Internal Icon
         env:
           EVENT_NAME: ${{ github.event_name }}
           IPA_URL: ${{ github.event.inputs.ipa_url }}
@@ -57,20 +64,41 @@ jobs:
           CUSTOM_DESC: ${{ github.event.inputs.custom_desc }}
           CUSTOM_ICON: ${{ github.event.inputs.custom_icon }}
           CATEGORY_ID: ${{ github.event.inputs.category_id }}
+          SKIP_APPSTORE: ${{ github.event.inputs.skip_appstore }}
           REPO_NAME: ${{ github.repository }}
           BRANCH_NAME: ${{ github.ref_name }}
         run: |
           cat << 'EOF' > processor.py
-          import os, sys, io, glob, json, struct, zlib, zipfile, plistlib, urllib.request, urllib.parse, datetime, re
+          import os, sys, io, glob, json, struct, zlib, zipfile, plistlib, subprocess, urllib.request, urllib.parse, datetime, re
           from PIL import Image
 
-          # فك تشفير صيغة أبل CgBI PNG وتحويلها إلى PNG قياسية
-          def normalize_ios_png(data: bytes) -> bytes:
+          # تحويل أيقونة iOS المشفرة بصيغة CgBI إلى PNG قياسية تعمل على جميع المتصفحات
+          def convert_ios_icon_to_standard_png(raw_bytes: bytes, output_path: str) -> bool:
+              temp_in = "raw_ios_icon_temp.png"
+              with open(temp_in, "wb") as f:
+                  f.write(raw_bytes)
+
+              # 1. استخدام FFmpeg لفك تشفير CgBI PNG الأصلي من أبل
               try:
+                  res = subprocess.run(
+                      ["ffmpeg", "-y", "-i", temp_in, "-pix_fmt", "rgba", output_path],
+                      stdout=subprocess.DEVNULL,
+                      stderr=subprocess.DEVNULL
+                  )
+                  if res.returncode == 0 and os.path.exists(output_path) and os.path.getsize(output_path) > 200:
+                      os.remove(temp_in)
+                      return True
+              except Exception:
+                  pass
+
+              # 2. معالج بايثون البديل لفك ضغط CgBI PNG
+              try:
+                  data = raw_bytes
                   if b'CgBI' in data[:32]:
                       pos = 8
                       chunks = []
                       idat_raw = bytearray()
+                      width = height = 0
                       while pos < len(data):
                           length = struct.unpack('>I', data[pos:pos+4])[0]
                           chunk_type = data[pos+4:pos+8]
@@ -79,6 +107,9 @@ jobs:
                           pos += 12 + length
                           if chunk_type == b'CgBI':
                               continue
+                          elif chunk_type == b'IHDR':
+                              width, height = struct.unpack('>II', chunk_data[:8])
+                              chunks.append(struct.pack('>I', length) + chunk_type + chunk_data + crc)
                           elif chunk_type == b'IDAT':
                               idat_raw.extend(chunk_data)
                           elif chunk_type == b'IEND':
@@ -98,15 +129,20 @@ jobs:
                   else:
                       img = Image.open(io.BytesIO(data)).convert('RGBA')
 
-                  out = io.BytesIO()
-                  img.save(out, format='PNG')
-                  return out.getvalue()
+                  img.save(output_path, format='PNG')
+                  if os.path.exists(temp_in):
+                      os.remove(temp_in)
+                  return True
               except Exception as e:
-                  print(f"PNG normalization warning: {e}")
-                  return data
+                  print(f"Fallback icon save warning: {e}")
+                  with open(output_path, "wb") as out_f:
+                      out_f.write(raw_bytes)
+                  if os.path.exists(temp_in):
+                      os.remove(temp_in)
+                  return os.path.exists(output_path)
 
-          # استخراج أفضل أيقونة من داخل ملف الـ IPA نفسه
-          def extract_icon_from_ipa(zip_ref: zipfile.ZipFile, app_dir: str, plist_data: dict) -> bytes:
+          # استخراج ملف الأيقونة الخام من داخل ملفات الـ IPA
+          def extract_raw_icon_from_ipa(zip_ref: zipfile.ZipFile, app_dir: str, plist_data: dict) -> bytes:
               icon_candidates = []
               icon_names = []
 
@@ -132,27 +168,31 @@ jobs:
               all_entries = zip_ref.namelist()
               app_pngs = [
                   f for f in all_entries
-                  if f.startswith(app_dir) and f.lower().endswith('.png') and f.count('/') <= 3
+                  if f.startswith(app_dir) and f.lower().endswith('.png') and not f.endswith('/')
               ]
 
               for f in app_pngs:
                   base = os.path.basename(f).lower()
                   for iname in icon_names:
-                      clean_iname = iname.lower().replace('.png', '')
+                      clean_iname = os.path.basename(iname).lower().replace('.png', '')
                       if clean_iname and base.startswith(clean_iname):
                           icon_candidates.append(f)
 
               if not icon_candidates:
                   for f in app_pngs:
                       base = os.path.basename(f).lower()
-                      if 'appicon' in base or 'icon' in base:
+                      if 'appicon' in base or 'icon' in base or 'logo' in base:
                           icon_candidates.append(f)
+
+              if not icon_candidates and app_pngs:
+                  icon_candidates = app_pngs
 
               if icon_candidates:
                   best_entry = max(set(icon_candidates), key=lambda x: zip_ref.getinfo(x).file_size)
-                  print(f"Extracted internal icon from IPA: {best_entry}")
-                  return normalize_ios_png(zip_ref.read(best_entry))
+                  print(f"Selected internal IPA icon entry: {best_entry}")
+                  return zip_ref.read(best_entry)
 
+              # فحص ملف Assets.car في حال عدم وجود أي ملف PNG منفصل
               car_path = f"{app_dir}Assets.car"
               if car_path in all_entries:
                   car_bytes = zip_ref.read(car_path)
@@ -167,15 +207,13 @@ jobs:
                       end_idx = car_bytes.find(iend_sig, idx)
                       if end_idx != -1:
                           blob = car_bytes[idx:end_idx + 8]
-                          if 1024 < len(blob) < 500000:
+                          if 1024 < len(blob) < 600000:
                               extracted_blobs.append(blob)
                           start = end_idx + 8
                       else:
                           break
                   if extracted_blobs:
-                      best_blob = max(extracted_blobs, key=len)
-                      print("Extracted embedded PNG from Assets.car")
-                      return normalize_ios_png(best_blob)
+                      return max(extracted_blobs, key=len)
 
               return None
 
@@ -188,6 +226,7 @@ jobs:
           custom_desc = 'نسخة معدلة ومحدثة'
           custom_icon = ''
           category_id = 'social'
+          skip_appstore = False
           cleanup_uploads = False
 
           if event_name == 'push':
@@ -203,12 +242,14 @@ jobs:
                       custom_desc = meta.get('desc', '').strip() or 'نسخة معدلة ومحدثة'
                       custom_icon = meta.get('icon', '').strip()
                       category_id = meta.get('category', 'social').strip() or 'social'
+                      skip_appstore = bool(meta.get('skip_appstore', False))
           else:
               ipa_url = os.environ.get('IPA_URL', '').strip()
               custom_name = os.environ.get('CUSTOM_NAME', '').strip()
               custom_desc = os.environ.get('CUSTOM_DESC', '').strip() or 'نسخة معدلة ومحدثة'
               custom_icon = os.environ.get('CUSTOM_ICON', '').strip()
               category_id = os.environ.get('CATEGORY_ID', 'social').strip() or 'social'
+              skip_appstore = os.environ.get('SKIP_APPSTORE', 'false').lower() == 'true'
 
               req = urllib.request.Request(ipa_url, headers={'User-Agent': 'Mozilla/5.0'})
               ipa_path = 'downloaded_temp.ipa'
@@ -219,7 +260,7 @@ jobs:
 
           plist_data = {}
           app_bundle_dir = ''
-          extracted_icon_bytes = None
+          raw_icon_bytes = None
 
           try:
               with zipfile.ZipFile(ipa_path, 'r') as z:
@@ -231,7 +272,7 @@ jobs:
                           break
 
                   if app_bundle_dir:
-                      extracted_icon_bytes = extract_icon_from_ipa(z, app_bundle_dir, plist_data)
+                      raw_icon_bytes = extract_raw_icon_from_ipa(z, app_bundle_dir, plist_data)
           except Exception as e:
               print(f"Error inspecting IPA archive: {e}")
 
@@ -245,32 +286,32 @@ jobs:
               clean_filename = f"pkg_{timestamp}.ipa"
           os.rename(ipa_path, clean_filename)
 
-          # 1. البحث أولاً في متجر أبل بالـ Bundle ID
           icon_url = custom_icon
-          if not icon_url and bundle_id != 'com.ipablack.app':
-              for country in ('us', 'iq', 'sa', 'gb', 'ae'):
+
+          # إذا لم يكن التطبيق محدداً كمحذوف، نفحص الـ Bundle ID فقط؛ وإذا كان محذوفاً نتخطى متجر أبل تماماً
+          if not icon_url and not skip_appstore and bundle_id != 'com.ipablack.app':
+              for country in ('us', 'iq', 'sa'):
                   try:
                       u = f"https://itunes.apple.com/lookup?bundleId={urllib.parse.quote(bundle_id)}&country={country}"
-                      with urllib.request.urlopen(u, timeout=5) as r:
+                      with urllib.request.urlopen(u, timeout=4) as r:
                           d = json.loads(r.read().decode())
                           if d.get('resultCount', 0) > 0:
                               icon_url = d['results'][0].get('artworkUrl512') or d['results'][0].get('artworkUrl100')
                               if icon_url:
-                                  print(f"Found official App Store icon ({country}): {icon_url}")
+                                  print(f"App exists on App Store ({country}), using icon: {icon_url}")
                                   break
                   except Exception:
                       pass
 
-          # 2. إذا كان التطبيق محذوفاً من الأب ستور، نحفظ أيقونته المستخرجة داخل assets/icons/
-          if not icon_url and extracted_icon_bytes:
+          # إذا كان التطبيق محذوفاً من المتجر، نأخذ صورته من ملفات التطبيق ونرفعها على GitHub بدون أي صور من أبل
+          if not icon_url and raw_icon_bytes:
               os.makedirs('assets/icons', exist_ok=True)
               safe_id = re.sub(r'[^a-zA-Z0-9_.-]', '_', bundle_id)
               icon_filename = f"{safe_id}_{timestamp}.png"
               icon_rel_path = f"assets/icons/{icon_filename}"
-              with open(icon_rel_path, 'wb') as icf:
-                  icf.write(extracted_icon_bytes)
-              icon_url = f"https://raw.githubusercontent.com/{repo_name}/{branch_name}/{icon_rel_path}"
-              print(f"Saved internal IPA icon to: {icon_rel_path}")
+              if convert_ios_icon_to_standard_png(raw_icon_bytes, icon_rel_path):
+                  icon_url = f"https://raw.githubusercontent.com/{repo_name}/{branch_name}/{icon_rel_path}"
+                  print(f"App is removed from App Store -> Extracted internal icon to: {icon_rel_path}")
 
           if os.path.exists('repo.json'):
               with open('repo.json', 'r', encoding='utf-8') as f:
@@ -297,6 +338,7 @@ jobs:
               "down": download_url,
               "size": file_size,
               "iconURL": icon_url,
+              "screenshotURLs": [],
               "category": category_id,
               "tintColor": "005BBB",
               "versions": [
@@ -339,9 +381,9 @@ jobs:
           if [ "$CLEANUP_UPLOADS" = "true" ] && [ -d "uploads" ]; then
             git rm -rf uploads/ || true
           fi
-          if [ -d "assets/icons" ]; then
-            git add -f assets/icons/
-          fi
+          mkdir -p assets/icons
+          git add -f assets/icons/ || true
           git add repo.json
           git commit -m "Publish ${{ env.APP_TITLE }}"
-          git push
+          git pull --rebase origin ${{ github.ref_name }} || true
+          git push origin HEAD:${{ github.ref_name }}

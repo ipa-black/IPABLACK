@@ -5,7 +5,7 @@
   "description": "أحدث التطبيقات المعدلة بروابط مباشرة وسريعة",
   "iconURL": "https://raw.githubusercontent.com/ipa-black/IPABLACK/main/assets/icon.png",
   "tintColor": "#1b62ce",
-  "repo_revision_id": 19,
+  "repo_revision_id": 20,
   "xsign_config": {
     "splash_screen": {
       "engine": "native_vector",
@@ -75,6 +75,30 @@
   ],
   "news": [],
   "apps": [
+    {
+      "name": "Vood Cinema",
+      "bundleIdentifier": "com.sinosig.ybapp",
+      "developerName": "IPA BLACK",
+      "version": "1.0.6",
+      "versionDate": "2026-10-26",
+      "versionDescription": "نسخة معدلة",
+      "localizedDescription": "نسخة معدلة",
+      "downloadURL": "https://github.com/ipa-black/IPABLACK/releases/download/rel-1792980704/Vood_Cinema_1.0.6.ipa",
+      "down": "https://github.com/ipa-black/IPABLACK/releases/download/rel-1792980704/Vood_Cinema_1.0.6.ipa",
+      "size": 52231410,
+      "iconURL": "https://raw.githubusercontent.com/ipa-black/IPABLACK/main/assets/icon.png",
+      "category": "media",
+      "tintColor": "005BBB",
+      "versions": [
+        {
+          "version": "1.0.6",
+          "date": "2026-10-26",
+          "size": 52231410,
+          "downloadURL": "https://github.com/ipa-black/IPABLACK/releases/download/rel-1792980704/Vood_Cinema_1.0.6.ipa",
+          "localizedDescription": "نسخة معدلة"
+        }
+      ]
+    },
     {
       "name": "تفاؤل",
       "bundleIdentifier": "com.alsalmi.tafaul",

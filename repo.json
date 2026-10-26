@@ -5,7 +5,7 @@
   "description": "أحدث التطبيقات المعدلة بروابط مباشرة وسريعة",
   "iconURL": "https://raw.githubusercontent.com/ipa-black/IPABLACK/main/assets/icon.png",
   "tintColor": "#005BBB",
-  "repo_revision_id": 7,
+  "repo_revision_id": 8,
   "xsign_config": {
     "splash_screen": {
       "engine": "custom_css",
@@ -74,30 +74,5 @@
     }
   ],
   "news": [],
-  "apps": [
-    {
-      "name": "Zsign",
-      "bundleIdentifier": "Zsignipasoon",
-      "developerName": "IPA BLACK",
-      "version": "4.0",
-      "versionDate": "2026-10-26",
-      "versionDescription": "نسخة معدلة ومحدثة",
-      "localizedDescription": "نسخة معدلة ومحدثة",
-      "downloadURL": "https://github.com/ipa-black/IPABLACK/releases/download/rel-1792977991/Zsign_4.0.ipa",
-      "down": "https://github.com/ipa-black/IPABLACK/releases/download/rel-1792977991/Zsign_4.0.ipa",
-      "size": 28856623,
-      "iconURL": "https://raw.githubusercontent.com/ipa-black/IPABLACK/main/assets/icon.png",
-      "category": "social",
-      "tintColor": "005BBB",
-      "versions": [
-        {
-          "version": "4.0",
-          "date": "2026-10-26",
-          "size": 28856623,
-          "downloadURL": "https://github.com/ipa-black/IPABLACK/releases/download/rel-1792977991/Zsign_4.0.ipa",
-          "localizedDescription": "نسخة معدلة ومحدثة"
-        }
-      ]
-    }
-  ]
+  "apps": []
 }

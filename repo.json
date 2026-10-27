@@ -5,7 +5,7 @@
   "description": "أحدث التطبيقات المعدلة بروابط مباشرة وسريعة",
   "iconURL": "https://raw.githubusercontent.com/ipa-black/IPABLACK/main/assets/icon.png",
   "tintColor": "#005BBB",
-  "repo_revision_id": 46,
+  "repo_revision_id": 47,
   "xsign_config": {
     "splash_screen": {
       "engine": "native_vector",
@@ -21,15 +21,15 @@
       "splash_logo_hex": "#FFFFFF"
     },
     "maintenance": {
-      "enabled": false,
+      "enabled": true,
       "title": "التطبيق قيد الصيانة والتحديث",
       "message": "نقوم حالياً بتحديث السيرفرات والشهادات، سيعود التطبيق للعمل قريباً.",
       "button_url": "https://t.me/ipa_black"
     },
     "force_update": {
-      "enabled": true,
+      "enabled": false,
       "min_version": "1.0.0",
-      "update_url": "https://github.com/ipa-black/IPABLACK/releases/latest",
+      "update_url": "l",
       "message": "يتوفر إصدار جديد وإجباري من تطبيق X-Sign يتضمن تحسينات هامة."
     },
     "security_locks": {

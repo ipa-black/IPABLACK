@@ -80,31 +80,6 @@
   "news": [],
   "apps": [
     {
-      "name": "Clnemana",
-      "bundleIdentifier": "com.foox.cinemanaa.fixed",
-      "developerName": "IPA BLACK",
-      "version": "4.1.0",
-      "versionDate": "2026-10-27",
-      "versionDescription": "نسخة معدلة",
-      "localizedDescription": "نسخة معدلة",
-      "downloadURL": "https://github.com/ipa-black/IPABLACK/releases/download/rel-1793097491/Clnemana_4.1.0.ipa",
-      "down": "https://github.com/ipa-black/IPABLACK/releases/download/rel-1793097491/Clnemana_4.1.0.ipa",
-      "size": 126453975,
-      "iconURL": "https://raw.githubusercontent.com/ipa-black/IPABLACK/main/assets/icons/com.foox.cinemanaa.fixed_1793097491.png",
-      "screenshotURLs": [],
-      "category": "social",
-      "tintColor": "005BBB",
-      "versions": [
-        {
-          "version": "4.1.0",
-          "date": "2026-10-27",
-          "size": 126453975,
-          "downloadURL": "https://github.com/ipa-black/IPABLACK/releases/download/rel-1793097491/Clnemana_4.1.0.ipa",
-          "localizedDescription": "نسخة معدلة"
-        }
-      ]
-    },
-    {
       "name": "تفاؤل",
       "bundleIdentifier": "com.alsalmi.tafaul",
       "developerName": "IPA BLACK",
@@ -117,7 +92,7 @@
       "size": 3616127,
       "iconURL": "https://raw.githubusercontent.com/ipa-black/IPABLACK/main/assets/icons/com.alsalmi.tafaul_1793036524.png",
       "screenshotURLs": [],
-      "category": "social",
+      "category": "tools",
       "tintColor": "005BBB",
       "versions": [
         {

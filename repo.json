@@ -5,7 +5,7 @@
   "description": "أحدث التطبيقات المعدلة بروابط مباشرة وسريعة",
   "iconURL": "https://raw.githubusercontent.com/ipa-black/IPABLACK/main/assets/icon.png",
   "tintColor": "#005BBB",
-  "repo_revision_id": 53,
+  "repo_revision_id": 54,
   "xsign_config": {
     "splash_screen": {
       "engine": "native_vector",
@@ -79,6 +79,31 @@
   ],
   "news": [],
   "apps": [
+    {
+      "name": "Clnemana",
+      "bundleIdentifier": "com.foox.cinemanaa.fixed",
+      "developerName": "IPA BLACK",
+      "version": "4.1.0",
+      "versionDate": "2026-10-27",
+      "versionDescription": "نسخة معدلة",
+      "localizedDescription": "نسخة معدلة",
+      "downloadURL": "https://github.com/ipa-black/IPABLACK/releases/download/rel-1793097667/Clnemana_4.1.0.ipa",
+      "down": "https://github.com/ipa-black/IPABLACK/releases/download/rel-1793097667/Clnemana_4.1.0.ipa",
+      "size": 126453975,
+      "iconURL": "https://raw.githubusercontent.com/ipa-black/IPABLACK/main/assets/icons/com.foox.cinemanaa.fixed_1793097667.png",
+      "screenshotURLs": [],
+      "category": "social",
+      "tintColor": "005BBB",
+      "versions": [
+        {
+          "version": "4.1.0",
+          "date": "2026-10-27",
+          "size": 126453975,
+          "downloadURL": "https://github.com/ipa-black/IPABLACK/releases/download/rel-1793097667/Clnemana_4.1.0.ipa",
+          "localizedDescription": "نسخة معدلة"
+        }
+      ]
+    },
     {
       "name": "Vood Cinema",
       "bundleIdentifier": "com.sinosig.ybapp",

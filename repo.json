@@ -5,7 +5,7 @@
   "description": "أحدث التطبيقات المعدلة بروابط مباشرة وسريعة",
   "iconURL": "https://raw.githubusercontent.com/ipa-black/IPABLACK/main/assets/icon.png",
   "tintColor": "#005BBB",
-  "repo_revision_id": 56,
+  "repo_revision_id": 57,
   "xsign_config": {
     "splash_screen": {
       "engine": "native_vector",
@@ -49,7 +49,7 @@
       "top_banner_text": "تم توفير شهادة توقيع جديدة داخل التطبيق",
       "top_banner_url": "https://t.me/ipa_black",
       "cache_flush_id": 3,
-      "purge_sources_id": 5,
+      "purge_sources_id": 6,
       "core_sources": [
         {
           "name": "IPA BLACK",

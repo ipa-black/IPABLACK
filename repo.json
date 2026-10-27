@@ -5,7 +5,7 @@
   "description": "أحدث التطبيقات المعدلة بروابط مباشرة وسريعة",
   "iconURL": "https://raw.githubusercontent.com/ipa-black/IPABLACK/main/assets/icon.png",
   "tintColor": "#005BBB",
-  "repo_revision_id": 50,
+  "repo_revision_id": 51,
   "xsign_config": {
     "splash_screen": {
       "engine": "native_vector",
@@ -71,6 +71,10 @@
     {
       "id": "tools",
       "name": "أدوات النظام"
+    },
+    {
+      "id": "entertainment",
+      "name": "ترفية"
     }
   ],
   "news": [],

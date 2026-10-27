@@ -5,7 +5,7 @@
   "description": "أحدث التطبيقات المعدلة بروابط مباشرة وسريعة",
   "iconURL": "https://raw.githubusercontent.com/ipa-black/IPABLACK/main/assets/icon.png",
   "tintColor": "#005BBB",
-  "repo_revision_id": 54,
+  "repo_revision_id": 55,
   "xsign_config": {
     "splash_screen": {
       "engine": "native_vector",
@@ -92,7 +92,7 @@
       "size": 126453975,
       "iconURL": "https://raw.githubusercontent.com/ipa-black/IPABLACK/main/assets/icons/com.foox.cinemanaa.fixed_1793097667.png",
       "screenshotURLs": [],
-      "category": "social",
+      "category": "entertainment",
       "tintColor": "005BBB",
       "versions": [
         {

@@ -5,7 +5,7 @@
   "description": "أحدث التطبيقات المعدلة بروابط مباشرة وسريعة",
   "iconURL": "https://raw.githubusercontent.com/ipa-black/IPABLACK/main/assets/icons/img_9cde268e-8849-467e-b158-58966482a019.png",
   "tintColor": "#005BBB",
-  "repo_revision_id": 69,
+  "repo_revision_id": 70,
   "xsign_config": {
     "splash_screen": {
       "engine": "native_vector",
@@ -45,7 +45,7 @@
       "vpn_warning_message": "عذراً، لا يمكن استخدام تطبيق X-Sign أو تحميل التطبيقات أثناء تشغيل VPN أو برامج مراقبة الشبكة (Proxy)."
     },
     "app_control": {
-      "top_banner_enabled": true,
+      "top_banner_enabled": false,
       "top_banner_text": "تم توفير شهادة توقيع جديدة داخل التطبيق",
       "top_banner_url": "https://t.me/ipa_black",
       "cache_flush_id": 4,

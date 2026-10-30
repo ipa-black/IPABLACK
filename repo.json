@@ -3,9 +3,9 @@
   "identifier": "xsign.core.ipablack",
   "subtitle": "السورس الرسمي لتطبيق X-Sign",
   "description": "أحدث التطبيقات المعدلة بروابط مباشرة وسريعة",
-  "iconURL": "https://raw.githubusercontent.com/ipa-black/IPABLACK/main/assets/icon.png",
+  "iconURL": "https://raw.githubusercontent.com/ipa-black/IPABLACK/main/assets/icons/img_9cde268e-8849-467e-b158-58966482a019.png",
   "tintColor": "#005BBB",
-  "repo_revision_id": 68,
+  "repo_revision_id": 69,
   "xsign_config": {
     "splash_screen": {
       "engine": "native_vector",

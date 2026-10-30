@@ -5,14 +5,14 @@
   "description": "أحدث التطبيقات المعدلة بروابط مباشرة وسريعة",
   "iconURL": "https://raw.githubusercontent.com/ipa-black/IPABLACK/main/assets/icon.png",
   "tintColor": "#005BBB",
-  "repo_revision_id": 59,
+  "repo_revision_id": 60,
   "xsign_config": {
     "splash_screen": {
       "engine": "native_vector",
       "animation_style": "liquid_shine",
-      "show_sign_feather": false,
-      "duration_seconds": 2.5,
-      "custom_code": "<style>body{margin:0;height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;background:linear-gradient(#002b66,#00183b);overflow:hidden;color:#ffffff;font-family:system-ui}svg{width:293px;height:293px;fill:#ffffff;filter:drop-shadow(0 0 0px #ffffff)}.sub{font-size:12px;letter-spacing:3px}.rib{fill:url(#shine)}@keyframes float{50%{transform:translateY(-8px)}}svg{animation:float 2s infinite}@media(prefers-reduced-motion:reduce){*{animation:none!important;stroke-dashoffset:0!important;fill:#ffffff!important}}</style><svg viewBox=\"0 0 1000 1000\" xmlns=\"http://www.w3.org/2000/svg\"><defs><linearGradient id=\"shine\"><stop stop-color=\"#ffffff\"/><stop offset=\".5\" stop-color=\"#8ec5ff\"><animate attributeName=\"offset\" values=\"0;1;0\" dur=\"2.2s\" repeatCount=\"indefinite\"/></stop><stop offset=\"1\" stop-color=\"#ffffff\"/></linearGradient></defs><path class=\"rib left\" d=\"M315.7 196.1 L443.1 196.1 L486.3 272.5 L637.3 56.9 L486.3 317.6 L427.5 219.6 L352.9 219.6 L437.3 382.4 L254.9 694.1 L415.7 382.4Z\"/><path class=\"rib right\" d=\"M745.1 56.9 L576.5 396.1 L674.5 574.5 L535.3 574.5 L500 502 L358.8 698 L502 454.9 L552.9 547.1 L635.3 547.1 L547.1 396.1Z\"/></svg><div class=\"sub\"></div>",
+      "show_sign_feather": true,
+      "duration_seconds": 6.2,
+      "custom_code": "<style>body{margin:0;height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;background:linear-gradient(#002b66,#00183b);overflow:hidden;color:#ffffff;font-family:system-ui}svg{width:293px;height:293px;fill:#ffffff;filter:drop-shadow(0 0 0px #ffffff)}.sub{font-size:12px;letter-spacing:3px}.rib{fill:url(#shine)}@keyframes float{50%{transform:translateY(-8px)}}svg{animation:float 2s infinite}@media(prefers-reduced-motion:reduce){*{animation:none!important;stroke-dashoffset:0!important;fill:#ffffff!important}}</style><svg viewBox=\"0 0 1000 1000\" xmlns=\"http://www.w3.org/2000/svg\"><defs><linearGradient id=\"shine\"><stop stop-color=\"#ffffff\"/><stop offset=\".5\" stop-color=\"#8ec5ff\"><animate attributeName=\"offset\" values=\"0;1;0\" dur=\"2.2s\" repeatCount=\"indefinite\"/></stop><stop offset=\"1\" stop-color=\"#ffffff\"/></linearGradient></defs><path class=\"rib left\" d=\"M315.7 196.1 L443.1 196.1 L486.3 272.5 L637.3 56.9 L486.3 317.6 L427.5 219.6 L352.9 219.6 L437.3 382.4 L254.9 694.1 L415.7 382.4Z\"/><path class=\"rib right\" d=\"M745.1 56.9 L576.5 396.1 L674.5 574.5 L535.3 574.5 L500 502 L358.8 698 L502 454.9 L552.9 547.1 L635.3 547.1 L547.1 396.1Z\"/><g fill=\"#ffffff\"><text x=\"455\" y=\"818\" text-anchor=\"middle\" font-family=\"Georgia,serif\" font-style=\"italic\" font-size=\"162\">Sign</text><path d=\"M604 812 C625 782 665 785 725 760 C702 770 686 772 668 770 C708 752 738 725 746 672 C722 715 688 732 646 745 C672 728 695 712 704 692 C674 718 642 726 622 752 C612 765 602 795 594 816Z\"/></g></svg><div class=\"sub\"></div>",
       "size_px": 293,
       "stroke_width": 17,
       "glow_radius": 0,
